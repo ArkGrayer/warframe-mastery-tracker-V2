@@ -7,26 +7,40 @@ export class FirestoreService implements IUserRepository {
   private readonly collectionName = "users";
 
   async getUserProfile(uid: string): Promise<UserProfile | null> {
-    const userDocRef = doc(db, this.collectionName, uid);
-    const userDoc = await getDoc(userDocRef);
+    try {
+      const userRef = doc(db, this.collectionName, uid);
+      const userDoc = await getDoc(userRef);
 
-    if (userDoc.exists()) {
-      return userDoc.data() as UserProfile;
+      if (userDoc.exists()) {
+        return userDoc.data() as UserProfile;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error getting user profile from Firestore:", error);
+      return null;
     }
-
-    return null;
   }
 
   async saveUserProfile(profile: UserProfile): Promise<void> {
-    const userDocRef = doc(db, this.collectionName, profile.uid);
-    await setDoc(userDocRef, profile, { merge: true });
+    try {
+      const userRef = doc(db, this.collectionName, profile.uid);
+      await setDoc(userRef, profile, { merge: true });
+    } catch (error) {
+      console.error("Error saving user profile to Firestore:", error);
+      throw error;
+    }
   }
 
   async updateMasteryData(uid: string, acquired: string[], mastered: string[]): Promise<void> {
-    const userDocRef = doc(db, this.collectionName, uid);
-    await updateDoc(userDocRef, {
-      acquired,
-      mastered
-    });
+    try {
+      const userRef = doc(db, this.collectionName, uid);
+      await updateDoc(userRef, {
+        acquired,
+        mastered
+      });
+    } catch (error) {
+      console.error("Error updating mastery data in Firestore:", error);
+      throw error;
+    }
   }
 }

@@ -1,84 +1,122 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useUserStore } from "@/application/stores/userStore";
 import { useFilterStore } from "@/application/stores/filterStore";
 import { IMAGE_BASE_URL } from "@/infrastructure/api/warframeApiService";
-import { LucideSearch, LucideEyeOff } from "lucide-react";
+import { LucideSearch, LucidePencil } from "lucide-react";
 import MasteryDashboard from "../mastery/MasteryDashboard";
+import GlyphSelectorModal from "../profile/GlyphSelectorModal";
+import TabBar from "./TabBar";
+import { useDebounce } from "@/presentation/hooks/useDebounce";
 import gsap from "gsap";
 
 const Header: React.FC = () => {
   const { profile } = useUserStore();
   const { searchTerm, setSearchTerm, hideMastered, setHideMastered } = useFilterStore();
+  const [showGlyphModal, setShowGlyphModal] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
+
+  // Local state for responsive input typing
+  const [localSearch, setLocalSearch] = useState(searchTerm);
+  const debouncedSearch = useDebounce(localSearch, 300);
+
+  // Update store only after debounce
+  useEffect(() => {
+    setSearchTerm(debouncedSearch);
+  }, [debouncedSearch, setSearchTerm]);
+
+  // Sync local search if store search changes externally
+  useEffect(() => {
+    setLocalSearch(searchTerm);
+  }, [searchTerm]);
 
   useEffect(() => {
     if (headerRef.current) {
       gsap.fromTo(
         headerRef.current,
-        { y: -100, opacity: 0 },
+        { y: -50, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.8, ease: "power4.out" }
       );
     }
   }, []);
 
   return (
-    <header 
-      ref={headerRef}
-      className="fixed top-0 left-0 right-0 z-40 bg-zinc-900/80 backdrop-blur-md border-b border-zinc-800 font-nunito"
-    >
-      <div className="max-w-7xl mx-auto px-4 h-24 flex flex-col justify-center">
-        <div className="flex items-center justify-between gap-8">
-          {/* User Info */}
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-indigo-500/50 shadow-lg shadow-indigo-500/10">
-              <img 
-                src={profile?.glyph ? `${IMAGE_BASE_URL}${profile.glyph}` : "https://via.placeholder.com/60"} 
-                alt="Profile Glyph" 
-                className="w-full h-full object-cover"
-              />
+    <>
+      <header 
+        ref={headerRef}
+        className="w-full bg-[#08060e] border-b border-[#1e1a2e] font-nunito shadow-2xl relative z-40"
+      >
+        <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+          {/* TOP ROW: Profile + Dashboard */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex items-center gap-6 flex-shrink-0 group">
+              <div 
+                onClick={() => setShowGlyphModal(true)}
+                className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-[#c8a96e] shadow-lg shadow-[#c8a96e]/10 cursor-pointer relative transition-transform duration-300 group-hover:scale-105 active:scale-95"
+              >
+                <img 
+                  src={profile?.glyph ? `${IMAGE_BASE_URL}${profile.glyph}` : "https://via.placeholder.com/80/100e1a/c8a96e?text=T"} 
+                  alt="Profile Glyph" 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  onError={(e) => (e.currentTarget.src = "https://via.placeholder.com/80/100e1a/c8a96e?text=T")}
+                />
+                <div className="absolute inset-0 bg-[#08060e]/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <LucidePencil className="w-6 h-6 text-[#c8a96e] animate-bounce" />
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <h2 className="text-3xl font-black text-[#f0e6d3] uppercase tracking-tighter leading-none transition-colors group-hover:text-[#c8a96e]">
+                  {profile?.nickname || "Tenno"}
+                </h2>
+                <span className="text-xs font-black text-[#c8a96e]/60 uppercase tracking-widest mt-2">
+                  Herdeiro de Orokin
+                </span>
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl font-black text-zinc-100 uppercase tracking-tighter leading-none">
-                {profile?.nickname || "Carregando..."}
-              </h2>
-              <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">
-                Tenno Operative
-              </span>
+
+            <div className="flex-1 w-full max-w-3xl transition-all duration-300 hover:brightness-110">
+              <MasteryDashboard />
             </div>
           </div>
 
-          {/* Mastery Dashboard */}
-          <div className="flex-1 max-w-md hidden md:block">
-            <MasteryDashboard />
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center gap-3">
-            <div className="relative group">
-              <LucideSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
+          {/* BOTTOM ROW: Search + Filter */}
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            <div className="relative flex-1 group w-full">
+              <LucideSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-[#8a7a9b]/40 group-focus-within:text-[#4cc9ff] transition-all group-hover:scale-110" />
               <input 
                 type="text" 
-                placeholder="Buscar itens..."
-                className="bg-zinc-950 border border-zinc-800 rounded-xl py-2.5 pl-10 pr-4 text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all w-48 lg:w-64"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Pesquisar Warframe, Arma, Veículo..."
+                className="bg-[#100e1a] border border-[#1e1a2e] rounded-2xl py-4 pl-14 pr-6 text-base text-[#f0e6d3] placeholder:text-[#8a7a9b]/30 focus:outline-none focus:border-[#4cc9ff] focus:ring-4 focus:ring-[#4cc9ff]/10 transition-all w-full hover:bg-[#151222] shadow-inner font-bold"
+                value={localSearch}
+                onChange={(e) => setLocalSearch(e.target.value)}
               />
             </div>
-            <button 
-              onClick={() => setHideMastered(!hideMastered)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border font-bold text-xs transition-all ${
-                hideMastered 
-                ? "bg-indigo-500/10 border-indigo-500 text-indigo-400 shadow-lg shadow-indigo-500/5" 
-                : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:border-zinc-700"
-              }`}
-            >
-              <LucideEyeOff className="w-4 h-4" />
-              <span className="hidden sm:inline">Ocultar Masterizados</span>
-            </button>
+            
+            <label className="flex items-center gap-4 px-8 py-4 rounded-2xl bg-[#100e1a] border border-[#1e1a2e] cursor-pointer transition-all hover:bg-[#151222] hover:border-[#c8a96e]/40 group active:scale-95 flex-shrink-0">
+              <div className="relative flex items-center">
+                <input 
+                  type="checkbox"
+                  className="peer hidden"
+                  checked={hideMastered}
+                  onChange={() => setHideMastered(!hideMastered)}
+                />
+                <div className="w-6 h-6 border-2 border-[#1e1a2e] rounded-md bg-[#08060e] peer-checked:bg-[#c8a96e] peer-checked:border-[#c8a96e] transition-all group-hover:border-[#c8a96e]/60 flex items-center justify-center">
+                  <div className="w-3 h-3 bg-[#08060e] rounded-sm opacity-0 peer-checked:opacity-100 transition-opacity" />
+                </div>
+              </div>
+              <span className="text-sm font-black text-[#8a7a9b] uppercase tracking-widest group-hover:text-[#f0e6d3] transition-colors whitespace-nowrap">
+                Ocultar Masterizados
+              </span>
+            </label>
           </div>
         </div>
-      </div>
-    </header>
+
+        <TabBar />
+      </header>
+
+      {showGlyphModal && (
+        <GlyphSelectorModal onClose={() => setShowGlyphModal(false)} />
+      )}
+    </>
   );
 };
 

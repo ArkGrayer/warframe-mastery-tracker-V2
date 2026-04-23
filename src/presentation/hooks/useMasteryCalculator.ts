@@ -1,11 +1,67 @@
 import { useMemo } from "react";
 import { useUserStore } from "@/application/stores/userStore";
-import { useItemStore } from "@/application/stores/itemStore";
+import { useItemStore as useItemsDataStore } from "@/application/stores/itemStore";
 import type { Item } from "@/domain/entities/Item";
 
 export const useMasteryCalculator = () => {
   const { profile } = useUserStore();
-  const { allItems } = useItemStore();
+  const { allItems } = useItemsDataStore();
+
+  const titles = [
+    "Iniciado",
+    "Novato",
+    "Discípulo",
+    "Buscador",
+    "Caçador",
+    "Águia",
+    "Tigre",
+    "Dragão",
+    "Sábio",
+    "Mestre",
+  ];
+
+  const imageNames = [
+    "Initiate",
+    "Novice",
+    "Disciple",
+    "Seeker",
+    "Hunter",
+    "Eagle",
+    "Tiger",
+    "Dragon",
+    "Sage",
+    "Master",
+  ];
+
+  const getTitleForRank = (r: number) => {
+    if (r === 0) return "Não Ranqueado";
+    if (r >= 31) return `Lendário ${r - 30}`;
+    
+    const titleIndex = Math.floor((r - 1) / 3);
+    const baseTitle = titles[titleIndex];
+    const mod = r % 3;
+    const suffix = mod === 1 ? "" : mod === 2 ? " Prateado" : " Dourado";
+    return baseTitle + suffix;
+  };
+
+  const getImageForRank = (r: number) => {
+    if (r === 0) return "Rank0.webp"; // Fallback if rank 0 exists or use Rank34/Initiate
+    if (r >= 31) return `Rank${r}.webp`;
+
+    const titleIndex = Math.floor((r - 1) / 3);
+    const baseName = imageNames[titleIndex];
+    const mod = r % 3;
+
+    if (mod === 1) {
+      // Logic for Bronze/Basic rank
+      const specialPrefixes = ["Disciple", "Seeker", "Dragon"];
+      return (specialPrefixes.includes(baseName) ? `MR${baseName}` : baseName) + ".webp";
+    } else if (mod === 2) {
+      return `Silver${baseName}.webp`;
+    } else {
+      return `Gold${baseName}.webp`;
+    }
+  };
 
   const masteryData = useMemo(() => {
     if (!profile || !allItems.length) {
@@ -15,7 +71,8 @@ export const useMasteryCalculator = () => {
         title: "Não Ranqueado",
         progressPct: 0,
         nextRankXP: 2500,
-        rankImageFile: "Rank0.webp",
+        nextTitle: "Iniciado",
+        rankImageFile: "Initiate.webp",
       };
     }
 
@@ -49,7 +106,7 @@ export const useMasteryCalculator = () => {
     // 3. XP for current and next rank
     const currentRankXP = 2500 * Math.pow(rank, 2);
     const nextRankXPTotal = 2500 * Math.pow(rank + 1, 2);
-    const xpNeededForNext = nextRankXPTotal - totalXP;
+    const xpRemaining = nextRankXPTotal - totalXP;
 
     // 4. Progress Percentage
     const progressPct =
@@ -57,58 +114,18 @@ export const useMasteryCalculator = () => {
         ? 100
         : ((totalXP - currentRankXP) / (nextRankXPTotal - currentRankXP)) * 100;
 
-    // 5. Title Logic
-    const titles = [
-      "Iniciado",
-      "Novato",
-      "Discípulo",
-      "Buscador",
-      "Caçador",
-      "Águia",
-      "Tigre",
-      "Dragão",
-      "Sábio",
-      "Mestre",
-    ];
-
-    let title = "";
-    let rankImageFile = `Rank${rank}.webp`;
-
-    if (rank === 0) {
-      title = "Não Ranqueado";
-    } else if (rank >= 31) {
-      title = `Lendário ${rank - 30}`;
-      rankImageFile = `Rank${rank}.webp`;
-    } else {
-      const titleIndex = Math.floor((rank - 1) / 3);
-      const baseTitle = titles[titleIndex];
-      const suffix = rank % 3 === 1 ? " Prateado" : rank % 3 === 0 ? " Dourado" : "";
-      title = baseTitle + suffix;
-
-      // Image logic (Initiate, Novice, etc.)
-      const imageTitles = [
-        "Initiate",
-        "Novice",
-        "Disciple",
-        "Seeker",
-        "Hunter",
-        "Eagle",
-        "Tiger",
-        "Dragon",
-        "Sage",
-        "Master",
-      ];
-      const baseImageTitle = imageTitles[titleIndex];
-      const imageSuffix = rank % 3 === 1 ? "Silver" : rank % 3 === 0 ? "Gold" : "";
-      rankImageFile = `${imageSuffix}${baseImageTitle}.webp`;
-    }
+    // 5. Titles and Images
+    const title = getTitleForRank(rank);
+    const nextTitle = getTitleForRank(rank + 1);
+    const rankImageFile = getImageForRank(rank);
 
     return {
       totalXP,
       rank,
       title,
+      nextTitle,
       progressPct,
-      nextRankXP: xpNeededForNext,
+      nextRankXP: xpRemaining,
       rankImageFile,
     };
   }, [profile, allItems]);

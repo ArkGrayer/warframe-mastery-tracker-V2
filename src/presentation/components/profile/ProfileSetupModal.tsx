@@ -3,7 +3,7 @@ import { useUserStore } from "@/application/stores/userStore";
 import { useItemStore } from "@/application/stores/itemStore";
 import { FirestoreService } from "@/infrastructure/firebase/firestoreService";
 import { IMAGE_BASE_URL } from "@/infrastructure/api/warframeApiService";
-import { LucideSearch, LucideUser, LucideCheck } from "lucide-react";
+import { LucideSearch, LucideUser, LucideCheck, LucideLoader2 } from "lucide-react";
 import gsap from "gsap";
 
 const ProfileSetupModal: React.FC = () => {
@@ -58,31 +58,31 @@ const ProfileSetupModal: React.FC = () => {
   };
 
   return (
-    <div ref={overlayRef} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm font-nunito">
+    <div ref={overlayRef} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#08060e]/90 backdrop-blur-sm font-nunito">
       <div 
         ref={modalRef}
-        className="w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="w-full max-w-2xl bg-[#100e1a] border border-[#1e1a2e] rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
       >
         <div className="p-8 space-y-6">
           <div className="text-center space-y-2">
-            <h2 className="text-3xl font-black text-zinc-100 uppercase tracking-tighter">
-              Configure seu Perfil
+            <h2 className="text-3xl font-black text-[#f0e6d3] uppercase tracking-tighter">
+              Iniciação Tenno
             </h2>
-            <p className="text-zinc-400 font-medium">
-              Escolha como os outros Tennos te verão no sistema.
+            <p className="text-[#8a7a9b] font-medium">
+              Defina sua identidade nos registros Orokin.
             </p>
           </div>
 
           <div className="space-y-6">
             {/* Nickname Input */}
             <div className="space-y-2">
-              <label className="text-xs font-bold text-zinc-500 uppercase ml-1">Seu Nickname</label>
+              <label className="text-xs font-bold text-[#c8a96e] uppercase ml-1">Nickname</label>
               <div className="relative group">
-                <LucideUser className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-600 group-focus-within:text-indigo-500 transition-colors" />
+                <LucideUser className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8a7a9b]/20 group-focus-within:text-[#4cc9ff] transition-colors" />
                 <input
                   type="text"
-                  className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl py-4 pl-12 pr-4 text-zinc-100 font-bold placeholder:text-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                  placeholder="Ex: TennoPrime"
+                  className="w-full bg-[#08060e] border border-[#1e1a2e] rounded-2xl py-4 pl-12 pr-4 text-[#f0e6d3] font-bold placeholder:text-[#8a7a9b]/10 focus:outline-none focus:ring-2 focus:ring-[#4cc9ff]/20 focus:border-[#4cc9ff] transition-all"
+                  placeholder="Ex: Excalibur_Prime"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
                 />
@@ -92,28 +92,28 @@ const ProfileSetupModal: React.FC = () => {
             {/* Glyph Selection */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-zinc-500 uppercase ml-1">Escolha um Glifo</label>
+                <label className="text-xs font-bold text-[#c8a96e] uppercase ml-1">Glifo de Honra</label>
                 <div className="relative">
-                  <LucideSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
+                  <LucideSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8a7a9b]/20" />
                   <input
                     type="text"
-                    className="bg-zinc-950 border border-zinc-800 rounded-full py-1.5 pl-9 pr-4 text-xs text-zinc-300 focus:outline-none focus:border-indigo-500 transition-all w-48"
-                    placeholder="Buscar glifo..."
+                    className="bg-[#08060e] border border-[#1e1a2e] rounded-full py-1.5 pl-9 pr-4 text-xs text-[#f0e6d3] focus:outline-none focus:border-[#4cc9ff] transition-all w-48"
+                    placeholder="Filtrar glifos..."
                     value={glyphSearch}
                     onChange={(e) => setGlyphSearch(e.target.value)}
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 max-h-60 overflow-y-auto p-2 bg-zinc-950/50 rounded-2xl border border-zinc-800/50 scrollbar-thin scrollbar-thumb-zinc-800">
+              <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 max-h-60 overflow-y-auto p-2 bg-[#08060e]/50 rounded-2xl border border-[#1e1a2e] scrollbar-thin scrollbar-thumb-[#c8a96e]/20">
                 {filteredGlyphs.map((glyph) => (
                   <button
                     key={glyph.uniqueName}
                     onClick={() => setSelectedGlyph(glyph.imageName || "")}
                     className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all group ${
                       selectedGlyph === glyph.imageName 
-                      ? "border-indigo-500 shadow-lg shadow-indigo-500/20 scale-105" 
-                      : "border-transparent hover:border-zinc-700"
+                      ? "border-[#c8a96e] shadow-lg shadow-[#c8a96e]/20 scale-105" 
+                      : "border-transparent hover:border-[#c8a96e]/30"
                     }`}
                   >
                     <img
@@ -122,8 +122,8 @@ const ProfileSetupModal: React.FC = () => {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform"
                     />
                     {selectedGlyph === glyph.imageName && (
-                      <div className="absolute inset-0 bg-indigo-500/20 flex items-center justify-center">
-                        <LucideCheck className="w-6 h-6 text-white" />
+                      <div className="absolute inset-0 bg-[#c8a96e]/20 flex items-center justify-center">
+                        <LucideCheck className="w-6 h-6 text-[#08060e]" />
                       </div>
                     )}
                   </button>
@@ -133,16 +133,16 @@ const ProfileSetupModal: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-6 bg-zinc-950/50 border-t border-zinc-800 flex justify-end">
+        <div className="p-6 bg-[#08060e]/50 border-t border-[#1e1a2e] flex justify-end">
           <button
             onClick={handleSave}
             disabled={loading || !nickname.trim()}
-            className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-zinc-800 disabled:text-zinc-600 text-white font-black rounded-xl shadow-xl shadow-indigo-500/20 transition-all active:scale-95 flex items-center gap-2"
+            className="px-8 py-3 bg-[#c8a96e] hover:bg-[#b0945a] disabled:bg-[#100e1a] disabled:text-[#8a7a9b]/20 text-[#08060e] font-black rounded-xl shadow-xl shadow-[#c8a96e]/10 transition-all active:scale-95 flex items-center gap-2"
           >
             {loading ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <LucideLoader2 className="w-5 h-5 animate-spin" />
             ) : (
-              "Confirmar"
+              "Confirmar Iniciação"
             )}
           </button>
         </div>

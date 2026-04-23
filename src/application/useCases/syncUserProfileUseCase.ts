@@ -11,6 +11,7 @@ export const syncUserProfileUseCase = async (uid: string) => {
     let profile = await firestoreService.getUserProfile(uid);
 
     if (!profile) {
+      // Create default profile if not exists
       profile = {
         uid,
         nickname: "Tenno",
@@ -19,6 +20,9 @@ export const syncUserProfileUseCase = async (uid: string) => {
         mastered: [],
       };
       await firestoreService.saveUserProfile(profile);
+      console.log(`[Firestore] New profile created for ${uid}`);
+    } else {
+      console.log(`[Firestore] Profile loaded for ${profile.nickname}`);
     }
 
     userStore.setProfile(profile);

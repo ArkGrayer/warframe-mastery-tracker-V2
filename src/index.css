@@ -9,9 +9,9 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #0a0a0a;
+  color-scheme: dark;
+  color: #f0e6d3; /* Void Marble */
+  background-color: #08060e; /* Void Deep */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -19,14 +19,64 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* GPU Acceleration & Performance Optimizations */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Force GPU for elements that often animate or transform */
+.gpu-accelerated, 
+button, 
+img, 
+.modal-content,
+.card-item {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
+}
+
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
+  background-color: #08060e;
+  overflow-x: hidden;
+  /* Melhora a performance de scroll */
+  scroll-behavior: smooth;
 }
 
 #root {
   width: 100%;
+}
+
+/* Custom scrollbar for Void theme */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #08060e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e1a2e;
+  border-radius: 10px;
+  border: 2px solid #08060e;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c8a96e;
+}
+
+/* Smooth fade-in for images to prevent layout shift */
+img {
+  transition: opacity 0.3s ease-in-out;
+}
+
+img[loading] {
+  opacity: 0;
+}
+
+img.loaded {
+  opacity: 1;
 }

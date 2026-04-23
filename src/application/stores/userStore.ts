@@ -8,49 +8,65 @@ interface UserState {
   isAuthLoading: boolean;
   setFirebaseUser: (user: User | null) => void;
   setProfile: (profile: UserProfile | null) => void;
+  setAuthLoading: (loading: boolean) => void;
   toggleAcquired: (uniqueName: string) => void;
   toggleMastered: (uniqueName: string) => void;
-  setAuthLoading: (loading: boolean) => void;
 }
 
-export const useUserStore = create<UserState>((set, get) => ({
+export const useUserStore = create<UserState>((set) => ({
   profile: null,
   firebaseUser: null,
-  isAuthLoading: false,
+  isAuthLoading: true,
+
   setFirebaseUser: (user) => set({ firebaseUser: user }),
   setProfile: (profile) => set({ profile }),
-  toggleAcquired: (uniqueName) => {
-    const { profile } = get();
-    if (!profile) return;
-
-    const isAcquired = profile.acquired.includes(uniqueName);
-    const newAcquired = isAcquired
-      ? profile.acquired.filter((id) => id !== uniqueName)
-      : [...profile.acquired, uniqueName];
-
-    // If removed from acquired, it must also be removed from mastered
-    const newMastered = isAcquired
-      ? profile.mastered.filter((id) => id !== uniqueName)
-      : profile.mastered;
-
-    set({ profile: { ...profile, acquired: newAcquired, mastered: newMastered } });
-  },
-  toggleMastered: (uniqueName) => {
-    const { profile } = get();
-    if (!profile) return;
-
-    const isMastered = profile.mastered.includes(uniqueName);
-    const newMastered = isMastered
-      ? profile.mastered.filter((id) => id !== uniqueName)
-      : [...profile.mastered, uniqueName];
-
-    // If mastered, it must also be acquired
-    let newAcquired = [...profile.acquired];
-    if (!isMastered && !newAcquired.includes(uniqueName)) {
-      newAcquired.push(uniqueName);
-    }
-
-    set({ profile: { ...profile, acquired: newAcquired, mastered: newMastered } });
-  },
   setAuthLoading: (loading) => set({ isAuthLoading: loading }),
+
+  toggleAcquired: (uniqueName) =>
+    set((state) => {
+      if (!state.profile) return state;
+
+      const isAcquired = state.profile.acquired.includes(uniqueName);
+      let newAcquired = isAcquired
+        ? state.profile.acquired.filter((id) => id !== uniqueName)
+        : [...state.profile.acquired, uniqueName];
+
+      // If removed from acquired, must be removed from mastered too
+      let newMastered = state.profile.mastered;
+      if (isAcquired) {
+        newMastered = state.profile.mastered.filter((id) => id !== uniqueName);
+      }
+
+      return {
+        profile: {
+          ...state.profile,
+          acquired: newAcquired,
+          mastered: newMastered,
+        },
+      };
+    }),
+
+  toggleMastered: (uniqueName) =>
+    set((state) => {
+      if (!state.profile) return state;
+
+      const isMastered = state.profile.mastered.includes(uniqueName);
+      let newMastered = isMastered
+        ? state.profile.mastered.filter((id) => id !== uniqueName)
+        : [...state.profile.mastered, uniqueName];
+
+      // If added to mastered, must be added to acquired too
+      let newAcquired = state.profile.acquired;
+      if (!isMastered && !state.profile.acquired.includes(uniqueName)) {
+        newAcquired = [...state.profile.acquired, uniqueName];
+      }
+
+      return {
+        profile: {
+          ...state.profile,
+          acquired: newAcquired,
+          mastered: newMastered,
+        },
+      };
+    }),
 }));

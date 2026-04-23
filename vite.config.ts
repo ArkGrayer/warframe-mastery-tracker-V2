@@ -10,4 +10,30 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    // Aumenta o limite de aviso para 1MB
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        // Estratégia de split de vendor para melhor performance de carregamento e cache
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('firebase')) {
+              return 'vendor-firebase';
+            }
+            if (id.includes('gsap')) {
+              return 'vendor-gsap';
+            }
+            if (id.includes('react-virtuoso')) {
+              return 'vendor-virtuoso';
+            }
+            if (id.includes('lucide-react')) {
+              return 'vendor-icons';
+            }
+            return 'vendor-core'; // React, Zustand, etc.
+          }
+        }
+      }
+    }
+  }
 })

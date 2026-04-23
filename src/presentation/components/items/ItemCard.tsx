@@ -22,7 +22,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
       gsap.fromTo(
         cardRef.current,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
       );
     }
   }, []);
@@ -37,19 +37,28 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
     await persistMasteryUseCase();
   };
 
-  const xpValue = item.totalExperience || (
-    ["Warframes", "Archwing", "Necramech", "K-Drive", "Pets", "Sentinels", "MOA", "Hound"].includes(item.category) 
-    ? 6000 : 3000
-  );
+  const xpValue =
+    item.totalExperience ||
+    ([
+      "Warframes",
+      "Necramech",
+      "K-Drive",
+      "Pets",
+      "Sentinels",
+      "MOA",
+      "Hound",
+    ].includes(item.category)
+      ? 6000
+      : 3000);
 
   return (
     <div
       ref={cardRef}
       className={`flex flex-col gap-3 p-4 rounded-2xl border-2 transition-all duration-300 group overflow-hidden ${
-        isMastered 
-          ? "border-[#4cc9ff]/50 bg-[#4cc9ff]/[0.02] opacity-70" 
-          : isAcquired 
-            ? "border-[#c8a96e]/50 bg-[#c8a96e]/[0.02]" 
+        isMastered
+          ? "border-[#4cc9ff]/50 bg-[#4cc9ff]/[0.02] opacity-70"
+          : isAcquired
+            ? "border-[#c8a96e]/50 bg-[#c8a96e]/[0.02]"
             : "border-[#1e1a2e] bg-[#100e1a] hover:border-[#2e2845]"
       }`}
     >
@@ -76,7 +85,9 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
       </h4>
 
       {/* 3. Badge de XP - Only visible when MASTERED */}
-      <div className={`h-5 transition-opacity duration-300 ${isMastered ? "opacity-100" : "opacity-0"}`}>
+      <div
+        className={`h-5 transition-opacity duration-300 ${isMastered ? "opacity-100" : "opacity-0"}`}
+      >
         <span className="text-[10px] font-black text-[#4cc9ff] uppercase tracking-widest bg-[#4cc9ff]/10 px-2 py-0.5 rounded-full border border-[#4cc9ff]/20">
           +{xpValue.toLocaleString("pt-BR")} XP
         </span>
@@ -93,7 +104,9 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
           }`}
         >
           <LucideBox size={14} />
-          <span className="hidden xs:inline">{isAcquired ? "Adquirido" : "Adquirir"}</span>
+          <span className="hidden xs:inline">
+            {isAcquired ? "Adquirido" : "Adquirir"}
+          </span>
         </button>
         <button
           onClick={handleMasteredToggle}
@@ -104,7 +117,9 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
           }`}
         >
           <LucideCheckCircle2 size={14} />
-          <span className="hidden xs:inline">{isMastered ? "Mestre" : "Masterizar"}</span>
+          <span className="hidden xs:inline">
+            {isMastered ? "Mestre" : "Masterizar"}
+          </span>
         </button>
       </div>
     </div>

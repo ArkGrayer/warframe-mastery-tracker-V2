@@ -21,7 +21,6 @@ const GlyphSelectorModal: React.FC<GlyphSelectorModalProps> = ({ onClose }) => {
   const { profile, setProfile } = useUserStore();
   const { allGlyphs } = useItemStore();
   
-  // States
   const [glyphSearch, setGlyphSearch] = useState("");
   const debouncedSearch = useDebounce(glyphSearch, 300);
   const [selectedGlyph, setSelectedGlyph] = useState(profile?.glyph || "");
@@ -32,7 +31,6 @@ const GlyphSelectorModal: React.FC<GlyphSelectorModalProps> = ({ onClose }) => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  // Entrance Animation
   useEffect(() => {
     const tl = gsap.timeline();
     tl.fromTo(
@@ -47,7 +45,6 @@ const GlyphSelectorModal: React.FC<GlyphSelectorModalProps> = ({ onClose }) => {
     );
   }, []);
 
-  // Filter Logic
   const filteredGlyphs = useMemo(() => {
     return allGlyphs.filter((g) =>
       g.name.toLowerCase().includes(debouncedSearch.toLowerCase())
@@ -58,7 +55,6 @@ const GlyphSelectorModal: React.FC<GlyphSelectorModalProps> = ({ onClose }) => {
     return filteredGlyphs.slice(0, visibleCount);
   }, [filteredGlyphs, visibleCount]);
 
-  // Infinite Scroll using Intersection Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -76,7 +72,6 @@ const GlyphSelectorModal: React.FC<GlyphSelectorModalProps> = ({ onClose }) => {
     return () => observer.disconnect();
   }, [filteredGlyphs.length, visibleCount]);
 
-  // Reset count on search
   useEffect(() => {
     setVisibleCount(60);
   }, [debouncedSearch]);
@@ -154,7 +149,6 @@ const GlyphSelectorModal: React.FC<GlyphSelectorModalProps> = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Traditional Grid with Progressive Loading */}
         <div className="flex-1 overflow-y-auto px-8 py-4 scrollbar-thin scrollbar-thumb-[#c8a96e]/20 scrollbar-track-transparent">
           <div className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 gap-4 pb-8">
             {glyphsToShow.map((glyph) => (
@@ -185,7 +179,6 @@ const GlyphSelectorModal: React.FC<GlyphSelectorModalProps> = ({ onClose }) => {
             ))}
           </div>
 
-          {/* Sentinel for Infinite Scroll */}
           {visibleCount < filteredGlyphs.length && (
             <div ref={loadMoreRef} className="flex justify-center py-12">
               <LucideLoader2 className="w-8 h-8 text-[#c8a96e]/40 animate-spin" />
@@ -193,7 +186,6 @@ const GlyphSelectorModal: React.FC<GlyphSelectorModalProps> = ({ onClose }) => {
           )}
         </div>
 
-        {/* Footer Actions */}
         <div className="p-8 pt-4 flex items-center justify-between bg-gradient-to-t from-[#08060e] to-transparent flex-shrink-0">
           <button
             onClick={onClose}

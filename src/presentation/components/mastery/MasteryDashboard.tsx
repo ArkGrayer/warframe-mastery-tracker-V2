@@ -7,7 +7,6 @@ const MasteryDashboard: React.FC = () => {
   const progressBarRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Function to resolve rank image path from src/assets/img/ranks/
   const getRankImageUrl = (filename: string) => {
     try {
       return new URL(`../../../assets/img/ranks/${filename}`, import.meta.url).href;
@@ -16,7 +15,6 @@ const MasteryDashboard: React.FC = () => {
     }
   };
 
-  // Progress Bar Animation
   useEffect(() => {
     if (progressBarRef.current) {
       gsap.to(progressBarRef.current, {
@@ -27,7 +25,6 @@ const MasteryDashboard: React.FC = () => {
     }
   }, [progressPct]);
 
-  // Rank Change Flash Effect
   useEffect(() => {
     if (containerRef.current && rank > 0) {
       gsap.fromTo(
@@ -48,10 +45,8 @@ const MasteryDashboard: React.FC = () => {
       ref={containerRef}
       className="w-full bg-[#100e1a] border border-[#1e1a2e] rounded-xl p-4 flex items-center gap-6 font-nunito group/dash hover:border-[#c8a96e]/20 transition-all duration-500 shadow-2xl relative overflow-hidden"
     >
-      {/* Subtle Background Glow */}
       <div className="absolute -left-20 -top-20 w-40 h-40 bg-[#4cc9ff]/5 blur-[80px] pointer-events-none" />
 
-      {/* Rank Badge */}
       <div className="relative flex-shrink-0">
         <div className="w-16 h-16 flex items-center justify-center relative z-10 transition-transform duration-500 group-hover/dash:scale-125">
           <img
@@ -68,11 +63,9 @@ const MasteryDashboard: React.FC = () => {
           {rank}
         </div>
         
-        {/* Hover Aura */}
         <div className="absolute inset-0 bg-[#4cc9ff]/20 blur-2xl rounded-full opacity-0 group-hover/dash:opacity-100 transition-opacity duration-700" />
       </div>
 
-      {/* Progress Info */}
       <div className="flex-1 min-w-0 space-y-3">
         <div className="flex items-end justify-between gap-4">
           <div className="truncate">
@@ -93,7 +86,6 @@ const MasteryDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Progress Bar Container */}
         <div className="space-y-2.5">
           <div className="h-3 w-full bg-[#08060e] rounded-full overflow-hidden border border-[#1e1a2e] p-[2px] shadow-inner relative">
             <div

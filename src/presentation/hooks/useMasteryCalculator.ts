@@ -53,7 +53,6 @@ export const useMasteryCalculator = () => {
     const mod = r % 3;
 
     if (mod === 1) {
-      // Logic for Bronze/Basic rank
       const specialPrefixes = ["Disciple", "Seeker", "Dragon"];
       return (specialPrefixes.includes(baseName) ? `MR${baseName}` : baseName) + ".webp";
     } else if (mod === 2) {
@@ -76,7 +75,6 @@ export const useMasteryCalculator = () => {
       };
     }
 
-    // 1. Calculate Total XP
     let totalXP = 0;
     profile.mastered.forEach((uniqueName: string) => {
       const item = allItems.find((i: Item) => i.uniqueName === uniqueName);
@@ -99,22 +97,18 @@ export const useMasteryCalculator = () => {
       }
     });
 
-    // 2. Calculate Rank (max 33)
     let rank = Math.floor(Math.sqrt(totalXP / 2500));
     rank = Math.min(rank, 33);
 
-    // 3. XP for current and next rank
     const currentRankXP = 2500 * Math.pow(rank, 2);
     const nextRankXPTotal = 2500 * Math.pow(rank + 1, 2);
     const xpRemaining = nextRankXPTotal - totalXP;
 
-    // 4. Progress Percentage
     const progressPct =
       rank >= 33
         ? 100
         : ((totalXP - currentRankXP) / (nextRankXPTotal - currentRankXP)) * 100;
 
-    // 5. Titles and Images
     const title = getTitleForRank(rank);
     const nextTitle = getTitleForRank(rank + 1);
     const rankImageFile = getImageForRank(rank);

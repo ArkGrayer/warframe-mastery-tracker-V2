@@ -32,22 +32,17 @@ export class WarframeApiService implements IItemRepository {
     const glyphs: Item[] = [];
 
     data.forEach((rawItem: any) => {
-      // 1. Check if it's a glyph
       if (rawItem.category === "Glyphs") {
         glyphs.push(this.mapToItem(rawItem));
         return;
       }
 
-      // 2. Filter masterable items
       if (!rawItem.masterable) return;
 
-      // 3. Filter excluded names
       if (EXCLUDED_NAMES.includes(rawItem.name)) return;
 
-      // 4. Check category mapping
       if (!CATEGORY_MAP[rawItem.category]) return;
 
-      // 5. Normalize data
       const normalizedItem = this.normalizeItemData(rawItem);
       
       items.push(normalizedItem);

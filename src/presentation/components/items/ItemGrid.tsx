@@ -15,15 +15,12 @@ const ItemGrid: React.FC = () => {
   const filteredItems = useMemo(() => {
     let result = allItems;
 
-    // 1. Filter by Search Term
     if (searchTerm.trim() !== "") {
       const term = searchTerm.toLowerCase();
       result = result.filter((item) => item.name.toLowerCase().includes(term));
     } else {
-      // 2. Filter by Category (only if search is empty)
       result = result.filter((item) => CATEGORY_MAP[item.category] === currentCategory);
 
-      // 3. Filter by SubFilter
       if (currentSubFilter !== "all") {
         if (currentCategory === "Pets" || currentCategory === "Amps") {
           result = result.filter((item) => item.subType === currentSubFilter);
@@ -33,7 +30,6 @@ const ItemGrid: React.FC = () => {
       }
     }
 
-    // 4. Hide Mastered
     if (hideMastered && profile) {
       result = result.filter((item) => !profile.mastered.includes(item.uniqueName));
     }

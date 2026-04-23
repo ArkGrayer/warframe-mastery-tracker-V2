@@ -74,7 +74,6 @@ const ProfileSetupModal: React.FC = () => {
           </div>
 
           <div className="space-y-6">
-            {/* Nickname Input */}
             <div className="space-y-2">
               <label className="text-xs font-bold text-[#c8a96e] uppercase ml-1">Nickname</label>
               <div className="relative group">
@@ -89,7 +88,6 @@ const ProfileSetupModal: React.FC = () => {
               </div>
             </div>
 
-            {/* Glyph Selection */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-bold text-[#c8a96e] uppercase ml-1">Glifo de Honra</label>

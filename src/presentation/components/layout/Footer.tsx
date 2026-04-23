@@ -56,7 +56,6 @@ const Footer: React.FC = () => {
       <div className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[600px] h-60 bg-[#4cc9ff]/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="max-w-4xl mx-auto flex flex-col items-center text-center gap-10 relative z-10">
-        {/* Legal Disclaimer */}
         <div className="space-y-4 max-w-2xl">
           <div className="flex items-center justify-center gap-2 text-[#8a7a9b]/40">
             <LucideInfo size={14} />
@@ -74,13 +73,12 @@ const Footer: React.FC = () => {
           </p>
         </div>
 
-        {/* Credits */}
         <div className="flex flex-col items-center gap-6">
           <div className="text-xs font-bold text-[#8a7a9b] uppercase tracking-widest flex items-center gap-2">
             <span>Desenvolvido no Void por</span>
             <div className="relative group cursor-pointer inline-block ml-1">
               <a
-                href="https://www.igorfeitosa.vercel.app"
+                href="igorfeitosa.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#f0e6d3] font-black transition-colors group-hover:text-[#4cc9ff]"
@@ -91,7 +89,6 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Legacy Import */}
           <div className="pt-4 border-t border-[#1e1a2e] w-full flex flex-col items-center">
             <input
               type="file"

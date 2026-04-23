@@ -16,7 +16,6 @@ export const fetchItemsUseCase = async () => {
   itemStore.setError(null);
 
   try {
-    // 1. Check Cache
     const cachedTime = await get<number>(CACHE_KEY_TIME);
     const now = Date.now();
     const isCacheValid = cachedTime && (now - cachedTime < CACHE_EXPIRATION);
@@ -33,12 +32,10 @@ export const fetchItemsUseCase = async () => {
       }
     }
 
-    // 2. Fetch from API if cache invalid or missing
     console.log("Warframe Mastery Tracker: Sincronizando com API Oficial (Primeira vez ou Cache expirado)");
     const items = await apiService.fetchAllItems();
     const glyphs = await apiService.fetchAllGlyphs();
 
-    // 3. Save to Cache
     await set(CACHE_KEY_ITEMS, items);
     await set(CACHE_KEY_GLYPHS, glyphs);
     await set(CACHE_KEY_TIME, now);

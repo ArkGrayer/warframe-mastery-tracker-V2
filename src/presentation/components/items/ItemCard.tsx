@@ -62,7 +62,6 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
             : "border-[#1e1a2e] bg-[#100e1a] hover:border-[#2e2845]"
       }`}
     >
-      {/* 1. Item Image */}
       <div className="aspect-square w-full bg-[#08060e] rounded-xl overflow-hidden border border-[#1e1a2e] relative flex-shrink-0 group-hover:scale-[1.02] transition-transform">
         <img
           src={`${IMAGE_BASE_URL}${item.imageName}`}
@@ -79,12 +78,10 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
         )}
       </div>
 
-      {/* 2. Name */}
       <h4 className="text-[#f0e6d3] font-black text-sm uppercase tracking-tight line-clamp-2 min-h-[2.5rem]">
         {item.name}
       </h4>
 
-      {/* 3. Badge de XP - Only visible when MASTERED */}
       <div
         className={`h-5 transition-opacity duration-300 ${isMastered ? "opacity-100" : "opacity-0"}`}
       >
@@ -93,7 +90,6 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
         </span>
       </div>
 
-      {/* 4. Botões */}
       <div className="grid grid-cols-2 gap-2 mt-auto">
         <button
           onClick={handleAcquiredToggle}

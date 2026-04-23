@@ -21,7 +21,6 @@ const TabBar: React.FC = () => {
   return (
     <div className="w-full bg-[#08060e] border-t border-[#1e1a2e] font-nunito transition-all duration-300">
       <div className="max-w-7xl mx-auto">
-        {/* Main Tabs */}
         <div className="flex items-center gap-2 px-4 overflow-x-auto scrollbar-hide py-3 flex-nowrap">
           {TABS.map((tab) => {
             const isActive = currentCategory === tab.id;
@@ -41,7 +40,6 @@ const TabBar: React.FC = () => {
           })}
         </div>
 
-        {/* Sub-Tabs (Conditional) */}
         {subCategories.length > 0 && (
           <div className="flex items-center gap-3 px-6 py-4 bg-[#100e1a] border-t border-[#1e1a2e] overflow-x-auto scrollbar-hide flex-nowrap animate-in slide-in-from-top-2 duration-500">
             <button

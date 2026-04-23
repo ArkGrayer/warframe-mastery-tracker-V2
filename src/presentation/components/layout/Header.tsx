@@ -15,16 +15,13 @@ const Header: React.FC = () => {
   const [showGlyphModal, setShowGlyphModal] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 
-  // Local state for responsive input typing
   const [localSearch, setLocalSearch] = useState(searchTerm);
   const debouncedSearch = useDebounce(localSearch, 300);
 
-  // Update store only after debounce
   useEffect(() => {
     setSearchTerm(debouncedSearch);
   }, [debouncedSearch, setSearchTerm]);
 
-  // Sync local search if store search changes externally
   useEffect(() => {
     setLocalSearch(searchTerm);
   }, [searchTerm]);
@@ -46,7 +43,6 @@ const Header: React.FC = () => {
         className="w-full bg-[#08060e] border-b border-[#1e1a2e] font-nunito shadow-2xl relative z-40"
       >
         <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-          {/* TOP ROW: Profile + Dashboard */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-6 flex-shrink-0 group">
               <div 
@@ -78,7 +74,6 @@ const Header: React.FC = () => {
             </div>
           </div>
 
-          {/* BOTTOM ROW: Search + Filter */}
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="relative flex-1 group w-full">
               <LucideSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-[#8a7a9b]/40 group-focus-within:text-[#4cc9ff] transition-all group-hover:scale-110" />

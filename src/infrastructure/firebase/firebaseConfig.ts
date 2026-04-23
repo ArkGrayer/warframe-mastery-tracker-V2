@@ -3,12 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCVNQbTtV3C6ozcJovLwKMFxu8seGd_DYc",
-  authDomain: "warframe-tracker-8426a.firebaseapp.com",
-  projectId: "warframe-tracker-8426a",
-  storageBucket: "warframe-tracker-8426a.firebasestorage.app",
-  messagingSenderId: "755306154710",
-  appId: "1:755306154710:web:7ce7e9b1088e26dd3fd777",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);

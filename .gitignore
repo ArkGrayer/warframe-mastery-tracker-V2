@@ -134,3 +134,12 @@ firebase-debug.log*
 firestore-debug.log*
 pubsub-debug.log*
 ui-debug.log*
+
+# Project Specific
+.env
+.env.local
+.env.*.local
+dist
+dist-ssr
+node_modules
+.gemini/

@@ -78,7 +78,7 @@ const Footer: React.FC = () => {
             <span>Desenvolvido no Void por</span>
             <div className="relative group cursor-pointer inline-block ml-1">
               <a
-                href="igorfeitosa.vercel.app"
+                href="http://igorfeitosa.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#f0e6d3] font-black transition-colors group-hover:text-[#4cc9ff]"

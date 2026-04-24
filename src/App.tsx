@@ -8,6 +8,7 @@ import Header from "@/presentation/components/layout/Header";
 import Footer from "@/presentation/components/layout/Footer";
 import ItemGrid from "@/presentation/components/items/ItemGrid";
 import ProfileSetupModal from "@/presentation/components/profile/ProfileSetupModal";
+import ScrollToTop from "@/presentation/components/layout/ScrollToTop";
 import { LucideLoader2 } from "lucide-react";
 
 function App() {
@@ -73,6 +74,8 @@ function App() {
       </main>
 
       <Footer />
+
+      <ScrollToTop />
 
       {profile?.nickname === "Tenno" && (
         <ProfileSetupModal />

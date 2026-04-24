@@ -189,25 +189,31 @@ const GlyphSelectorModal: React.FC<GlyphSelectorModalProps> = ({ onClose }) => {
         <div className="p-8 pt-4 flex items-center justify-between bg-gradient-to-t from-[#08060e] to-transparent flex-shrink-0">
           <button
             onClick={onClose}
-            className="px-6 py-3 text-[#8a7a9b] font-black uppercase tracking-widest text-xs hover:text-[#f0e6d3] transition-colors"
+            className="px-8 py-4 text-[#8a7a9b] font-black uppercase tracking-[0.2em] text-[10px] hover:text-[#f0e6d3] hover:bg-white/5 rounded-2xl transition-all active:scale-95"
           >
             Desistir
           </button>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             {selectedGlyph !== profile?.glyph && (
-              <span className="text-[10px] font-bold text-[#4cc9ff] uppercase animate-pulse">Sincronização Pronta</span>
+              <div className="flex flex-col items-end">
+                <span className="text-[10px] font-black text-[#4cc9ff] uppercase tracking-widest animate-pulse">Sincronização</span>
+                <span className="text-[8px] font-bold text-[#8a7a9b] uppercase tracking-[0.2em]">Pronta</span>
+              </div>
             )}
             <button
               onClick={handleSave}
               disabled={loading || selectedGlyph === profile?.glyph}
-              className="group relative px-10 py-4 bg-[#c8a96e] disabled:bg-[#1e1a2e] disabled:text-[#8a7a9b]/30 text-[#08060e] font-black rounded-2xl shadow-[0_10px_30px_rgba(200,169,110,0.2)] hover:shadow-[0_15px_40px_rgba(200,169,110,0.3)] hover:-translate-y-1 transition-all active:scale-95 overflow-hidden"
+              className="group relative px-12 py-4 bg-[#c8a96e] disabled:bg-[#c8a96e]/5 disabled:text-[#c8a96e]/20 disabled:border disabled:border-[#c8a96e]/10 disabled:shadow-none text-[#08060e] font-black rounded-2xl shadow-[0_20px_40px_rgba(200,169,110,0.2)] hover:shadow-[0_25px_50px_rgba(200,169,110,0.3)] hover:-translate-y-1 transition-all active:scale-95 overflow-hidden flex items-center justify-center min-w-[200px]"
             >
-              <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+              <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
               {loading ? (
-                <LucideLoader2 className="w-5 h-5 animate-spin" />
+                <div className="flex items-center gap-3">
+                  <LucideLoader2 className="w-5 h-5 animate-spin" />
+                  <span className="uppercase tracking-widest text-xs">Sincronizando...</span>
+                </div>
               ) : (
-                <span className="uppercase tracking-tighter text-sm">Sincronizar Glifo</span>
+                <span className="uppercase tracking-[0.1em] text-sm">Sincronizar Glifo</span>
               )}
             </button>
           </div>

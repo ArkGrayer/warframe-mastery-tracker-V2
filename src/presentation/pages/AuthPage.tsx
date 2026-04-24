@@ -120,8 +120,9 @@ const AuthPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#c8a96e] hover:bg-[#b0945a] disabled:bg-[#100e1a] disabled:text-[#8a7a9b]/20 text-[#08060e] font-black py-4 rounded-xl shadow-xl shadow-[#c8a96e]/10 transition-all flex items-center justify-center gap-2 group active:scale-95"
+            className="group relative w-full bg-[#c8a96e] disabled:bg-[#c8a96e]/5 disabled:text-[#c8a96e]/20 disabled:border disabled:border-[#c8a96e]/10 disabled:shadow-none text-[#08060e] font-black py-4 rounded-2xl shadow-[0_20px_40px_rgba(200,169,110,0.15)] hover:shadow-[0_25px_50px_rgba(200,169,110,0.25)] hover:-translate-y-1 transition-all active:scale-95 overflow-hidden flex items-center justify-center gap-2"
           >
+            <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
             {loading ? (
               <LucideLoader2 className="w-5 h-5 animate-spin" />
             ) : isLogin ? (

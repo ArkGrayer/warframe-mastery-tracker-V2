@@ -33,8 +33,7 @@ export const fetchItemsUseCase = async () => {
     }
 
     console.log("Warframe Mastery Tracker: Sincronizando com API Oficial (Primeira vez ou Cache expirado)");
-    const items = await apiService.fetchAllItems();
-    const glyphs = await apiService.fetchAllGlyphs();
+    const { items, glyphs } = await apiService.fetchAllData();
 
     await set(CACHE_KEY_ITEMS, items);
     await set(CACHE_KEY_GLYPHS, glyphs);

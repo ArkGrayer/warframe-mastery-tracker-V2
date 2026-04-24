@@ -73,10 +73,21 @@ img {
   transition: opacity 0.3s ease-in-out;
 }
 
-img[loading] {
-  opacity: 0;
+@keyframes bounce-short {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
 
-img.loaded {
-  opacity: 1;
+.animate-bounce-short {
+  animation: bounce-short 1s ease-in-out infinite;
+}
+
+@keyframes progress-loading {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-progress-loading {
+  animation: progress-loading 2s ease-in-out infinite;
 }

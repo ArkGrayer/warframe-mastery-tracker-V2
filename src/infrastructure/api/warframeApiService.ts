@@ -8,15 +8,18 @@ export class WarframeApiService implements IItemRepository {
   private readonly API_URL = "https://api.warframestat.us/items";
 
   async fetchAllItems(): Promise<Item[]> {
-    const data = await this.fetchFromApi();
-    const { items } = this.processData(data);
+    const { items } = await this.fetchAllData();
     return items;
   }
 
   async fetchAllGlyphs(): Promise<Item[]> {
-    const data = await this.fetchFromApi();
-    const { glyphs } = this.processData(data);
+    const { glyphs } = await this.fetchAllData();
     return glyphs;
+  }
+
+  async fetchAllData(): Promise<{ items: Item[]; glyphs: Item[] }> {
+    const data = await this.fetchFromApi();
+    return this.processData(data);
   }
 
   private async fetchFromApi(): Promise<any[]> {

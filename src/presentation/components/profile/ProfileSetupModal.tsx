@@ -131,16 +131,23 @@ const ProfileSetupModal: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-6 bg-[#08060e]/50 border-t border-[#1e1a2e] flex justify-end">
+        <div className="p-8 bg-[#08060e]/50 border-t border-[#1e1a2e] flex justify-end">
           <button
             onClick={handleSave}
             disabled={loading || !nickname.trim()}
-            className="px-8 py-3 bg-[#c8a96e] hover:bg-[#b0945a] disabled:bg-[#100e1a] disabled:text-[#8a7a9b]/20 text-[#08060e] font-black rounded-xl shadow-xl shadow-[#c8a96e]/10 transition-all active:scale-95 flex items-center gap-2"
+            className="group relative px-12 py-4 bg-[#c8a96e] disabled:bg-[#c8a96e]/5 disabled:text-[#c8a96e]/20 disabled:border disabled:border-[#c8a96e]/10 disabled:shadow-none text-[#08060e] font-black rounded-2xl shadow-[0_20px_40px_rgba(200,169,110,0.1)] hover:shadow-[0_25px_50px_rgba(200,169,110,0.2)] hover:-translate-y-1 transition-all active:scale-95 overflow-hidden flex items-center gap-3"
           >
+            <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
             {loading ? (
-              <LucideLoader2 className="w-5 h-5 animate-spin" />
+              <>
+                <LucideLoader2 className="w-5 h-5 animate-spin" />
+                <span className="uppercase tracking-widest text-xs">Processando...</span>
+              </>
             ) : (
-              "Confirmar Iniciação"
+              <>
+                <span className="uppercase tracking-[0.1em] text-sm">Confirmar Iniciação</span>
+                <LucideCheck className="w-5 h-5" />
+              </>
             )}
           </button>
         </div>

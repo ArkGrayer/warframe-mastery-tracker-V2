@@ -93,26 +93,26 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
       <div className="grid grid-cols-2 gap-2 mt-auto">
         <button
           onClick={handleAcquiredToggle}
-          className={`flex items-center justify-center gap-1.5 py-2 rounded-lg border text-[10px] font-black uppercase tracking-tighter transition-all active:scale-95 ${
+          className={`flex items-center justify-center gap-1.5 py-2.5 rounded-xl border-2 text-[10px] font-black uppercase tracking-tighter transition-all active:scale-95 shadow-sm ${
             isAcquired
-              ? "bg-[#c8a96e] border-[#c8a96e] text-[#08060e]"
-              : "bg-[#08060e] border-[#1e1a2e] text-[#8a7a9b] hover:border-[#c8a96e]/40 hover:text-[#c8a96e]"
+              ? "bg-[#c8a96e] border-[#c8a96e] text-[#08060e] shadow-[#c8a96e]/20"
+              : "bg-[#08060e] border-[#1e1a2e] text-[#8a7a9b] hover:border-[#c8a96e]/40 hover:text-[#c8a96e] hover:shadow-[0_5px_15px_rgba(200,169,110,0.1)]"
           }`}
         >
-          <LucideBox size={14} />
+          <LucideBox size={14} className={isAcquired ? "animate-bounce-short" : ""} />
           <span className="hidden xs:inline">
             {isAcquired ? "Adquirido" : "Adquirir"}
           </span>
         </button>
         <button
           onClick={handleMasteredToggle}
-          className={`flex items-center justify-center gap-1.5 py-2 rounded-lg border text-[10px] font-black uppercase tracking-tighter transition-all active:scale-95 ${
+          className={`flex items-center justify-center gap-1.5 py-2.5 rounded-xl border-2 text-[10px] font-black uppercase tracking-tighter transition-all active:scale-95 shadow-sm ${
             isMastered
-              ? "bg-[#4cc9ff] border-[#4cc9ff] text-[#08060e]"
-              : "bg-[#08060e] border-[#1e1a2e] text-[#8a7a9b] hover:border-[#4cc9ff]/40 hover:text-[#4cc9ff]"
+              ? "bg-[#4cc9ff] border-[#4cc9ff] text-[#08060e] shadow-[#4cc9ff]/20"
+              : "bg-[#08060e] border-[#1e1a2e] text-[#8a7a9b] hover:border-[#4cc9ff]/40 hover:text-[#4cc9ff] hover:shadow-[0_5px_15px_rgba(76,201,255,0.1)]"
           }`}
         >
-          <LucideCheckCircle2 size={14} />
+          <LucideCheckCircle2 size={14} className={isMastered ? "animate-pulse" : ""} />
           <span className="hidden xs:inline">
             {isMastered ? "Mestre" : "Masterizar"}
           </span>

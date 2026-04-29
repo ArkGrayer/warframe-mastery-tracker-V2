@@ -40,7 +40,7 @@ It does not guess. It does not approximate. It just shows you the truth about yo
 
 ## ✦ Features
 
-- **Real-time XP calculation** based on your mastered items — no mental math required, Operator
+- **Real-time XP calculation** based on your mastered items — no mental math required.
 - **Mastery Rank inference** with correct title progression, from _Initiate_ all the way to _Legendary 3_
 - **Category & sub-category filtering** — Warframes, Primary, Secondary, Melee, Archwing, Sentinels, Pets, Amps, and all their sub-types
 - **Global search** across all items regardless of the active category tab
@@ -53,16 +53,16 @@ It does not guess. It does not approximate. It just shows you the truth about yo
 
 ## ✦ Architecture
 
-This project follows a **Clean Architecture** pattern. Each layer has a single responsibility and depends only on what's below it — never above. It's not over-engineering. It's discipline.
+This project follows a **Clean Architecture** pattern. Each layer has a single responsibility and depends only on what's below it, never above. It's not over-engineering. It's just requiried a one IQ.
 
 ```
 src/
-├── 📁 domain/             ← The soul of the app. Zero dependencies. Zero excuses.
+├── 📁 domain/             ← The soul of the app. Zero dependencies.
 │   ├── entities/          ← Item, UserProfile, MasteryRankInfo. The nouns.
 │   ├── repositories/      ← Interfaces only. The what, never the how.
 │   └── valueObjects/      ← CategoryMap, exclusion lists, sub-category rules
 │
-├── 📁 application/        ← Where things actually happen. Orchestration lives here.
+├── 📁 application/        ← Where things actually happen. Caos lives here.
 │   ├── stores/            ← Zustand: itemStore, userStore, filterStore
 │   └── useCases/          ← fetchItems, persistMastery, syncUserProfile. The verbs.
 │
@@ -78,7 +78,7 @@ src/
 
 **`domain/`** knows nothing about React, Firebase, or any API. It defines what the data _is_ — not where it comes from or how it's displayed. Keep it that way.
 
-**`application/`** orchestrates use cases. It calls infrastructure, updates stores, and reacts to user intent. It speaks domain language and does not care about buttons.
+**`application/`** orchestrates use cases. It calls infrastructure, updates stores, and reacts to user intent.
 
 **`infrastructure/`** is where reality intrudes — HTTP calls, Firestore reads and writes, authentication state. Everything external is trapped here so it can't infect the rest of the codebase.
 
@@ -132,7 +132,7 @@ cd warframe-mastery-tracker
 npm install
 ```
 
-Before running, create a `.env` file at the root with your own Firebase project credentials. Don't commit it. Don't share it. Don't be that person.
+Before running, create a `.env` file at the root with your own Firebase project credentials. Don't commit it. Don't share it. Don't be that person. Just `don't be dumb, thanks`.
 
 ```env
 VITE_FIREBASE_API_KEY=your_api_key_here

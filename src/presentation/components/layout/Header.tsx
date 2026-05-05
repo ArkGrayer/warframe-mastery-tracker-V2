@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useUserStore } from "@/application/stores/userStore";
 import { useFilterStore } from "@/application/stores/filterStore";
 import { IMAGE_BASE_URL } from "@/infrastructure/api/warframeApiService";
-import { LucideSearch, LucidePencil } from "lucide-react";
+import { LucideSearch, LucidePencil, LucideLogOut } from "lucide-react";
+import { logout } from "@/infrastructure/firebase/authService";
 import MasteryDashboard from "../mastery/MasteryDashboard";
 import GlyphSelectorModal from "../profile/GlyphSelectorModal";
 import TabBar from "./TabBar";
@@ -60,9 +61,18 @@ const Header: React.FC = () => {
                 </div>
               </div>
               <div className="flex flex-col">
-                <h2 className="text-3xl font-black text-[#f0e6d3] uppercase tracking-tighter leading-none transition-colors group-hover:text-[#c8a96e]">
-                  {profile?.nickname || "Tenno"}
-                </h2>
+                <div className="flex items-center gap-4">
+                  <h2 className="text-3xl font-black text-[#f0e6d3] uppercase tracking-tighter leading-none transition-colors group-hover:text-[#c8a96e]">
+                    {profile?.nickname || "Tenno"}
+                  </h2>
+                  <button
+                    onClick={() => logout()}
+                    className="p-2 rounded-xl bg-[#1e1a2e] border border-[#2d283e] text-[#8a7a9b] hover:text-red-400 hover:border-red-400/30 hover:bg-red-400/10 transition-all active:scale-90 group/logout"
+                    title="Sair"
+                  >
+                    <LucideLogOut className="w-5 h-5 transition-transform group-hover/logout:translate-x-1" />
+                  </button>
+                </div>
                 <span className="text-xs font-black text-[#c8a96e]/60 uppercase tracking-widest mt-2">
                   Herdeiro de Orokin
                 </span>

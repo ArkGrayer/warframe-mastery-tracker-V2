@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { onAuthStateChange } from "@/infrastructure/firebase/authService";
 import { useUserStore } from "@/application/stores/userStore";
 import { fetchItemsUseCase } from "@/application/useCases/fetchItemsUseCase";
@@ -9,10 +10,12 @@ import Footer from "@/presentation/components/layout/Footer";
 import ItemGrid from "@/presentation/components/items/ItemGrid";
 import ProfileSetupModal from "@/presentation/components/profile/ProfileSetupModal";
 import ScrollToTop from "@/presentation/components/layout/ScrollToTop";
+import ProtectedRoute from "@/presentation/components/auth/ProtectedRoute";
+import PublicRoute from "@/presentation/components/auth/PublicRoute";
 import { LucideLoader2 } from "lucide-react";
 
 function App() {
-  const { firebaseUser, setFirebaseUser, isAuthLoading, setAuthLoading, profile } = useUserStore();
+  const { setFirebaseUser, isAuthLoading, setAuthLoading, profile } = useUserStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChange(async (user) => {
@@ -59,28 +62,42 @@ function App() {
     );
   }
 
-  if (!firebaseUser) {
-    return <AuthPage />;
-  }
-
   return (
-    <div className="min-h-screen bg-[#08060e] text-[#f0e6d3] font-nunito flex flex-col">
-      <Header />
-      
-      <main className="flex-1">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <ItemGrid />
-        </div>
-      </main>
+    <BrowserRouter>
+      <Routes>
+        <Route 
+          path="/login" 
+          element={
+            <PublicRoute>
+              <AuthPage />
+            </PublicRoute>
+          } 
+        />
+        <Route 
+          path="/" 
+          element={
+            <ProtectedRoute>
+              <div className="min-h-screen bg-[#08060e] text-[#f0e6d3] font-nunito flex flex-col">
+                <Header />
+                
+                <main className="flex-1">
+                  <div className="max-w-7xl mx-auto px-4 py-8">
+                    <ItemGrid />
+                  </div>
+                </main>
 
-      <Footer />
+                <Footer />
+                <ScrollToTop />
 
-      <ScrollToTop />
-
-      {profile?.nickname === "Tenno" && (
-        <ProfileSetupModal />
-      )}
-    </div>
+                {profile?.nickname === "Tenno" && (
+                  <ProfileSetupModal />
+                )}
+              </div>
+            </ProtectedRoute>
+          } 
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

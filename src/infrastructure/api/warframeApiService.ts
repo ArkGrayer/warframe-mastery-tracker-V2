@@ -23,7 +23,7 @@ export class WarframeApiService implements IItemRepository {
   }
 
   private async fetchFromApi(): Promise<any[]> {
-    const response = await fetch(this.API_URL);
+    const response = await fetch(`${this.API_URL}?only=uniqueName,name,category,productCategory,masterable`);
     if (!response.ok) {
       throw new Error("Failed to fetch items from Warframe API");
     }
@@ -93,12 +93,40 @@ export class WarframeApiService implements IItemRepository {
   private mapToItem(rawItem: any): Item {
     return {
       uniqueName: rawItem.uniqueName,
-      name: rawItem.name,
+      name: rawItem.name.replace(/<[^>]*>\s*/g, ""),
       category: rawItem.category,
       productCategory: rawItem.productCategory,
       imageName: rawItem.imageName,
       masterable: rawItem.masterable ?? false,
       totalExperience: rawItem.totalExperience,
     };
+  }
+
+  async fetchItemDetails(name: string): Promise<{ imageName?: string; totalExperience?: number }> {
+    try {
+      // Use exact match search or direct endpoint if possible. 
+      // The search endpoint returns an array.
+      const encodedName = encodeURIComponent(name);
+      const response = await fetch(`${this.API_URL}/search/${encodedName}?only=name,imageName,totalExperience`);
+      
+      if (!response.ok) return {};
+      
+      const data = await response.json();
+      
+      const sanitize = (n: string) => n.replace(/<[^>]*>\s*/g, "");
+      const match = Array.isArray(data) 
+        ? (data.find((item: any) => sanitize(item.name) === sanitize(name)) || data[0]) 
+        : data;
+      
+      if (!match) return null as any;
+
+      return {
+        imageName: match.imageName,
+        totalExperience: match.totalExperience
+      };
+    } catch (e) {
+      console.error(`Failed to fetch details for ${name}:`, e);
+      return {};
+    }
   }
 }

@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import type { Item } from "@/domain/entities/Item";
 import { useUserStore } from "@/application/stores/userStore";
+import { useItemStore } from "@/application/stores/itemStore";
 import { persistMasteryUseCase } from "@/application/useCases/persistMasteryUseCase";
+import { fetchItemDetailsUseCase } from "@/application/useCases/fetchItemDetailsUseCase";
 import { IMAGE_BASE_URL } from "@/infrastructure/api/warframeApiService";
 import { LucideCheckCircle2, LucideBox, LucideStar } from "lucide-react";
 import gsap from "gsap";
@@ -12,20 +14,28 @@ interface ItemCardProps {
 
 const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
   const { profile, toggleAcquired, toggleMastered } = useUserStore();
+  const { itemDetails } = useItemStore();
   const cardRef = useRef<HTMLDivElement>(null);
 
   const isAcquired = profile?.acquired.includes(item.uniqueName) || false;
   const isMastered = profile?.mastered.includes(item.uniqueName) || false;
 
+  const details = itemDetails[item.name];
+  // Stay in skeleton until we have the details (especially imageName)
+  const isPending = !details || (!details.imageName && !item.imageName);
+
   useEffect(() => {
-    if (cardRef.current) {
-      gsap.fromTo(
+    fetchItemDetailsUseCase(item.name);
+  }, [item.name]);
+
+  useEffect(() => {
+    if (cardRef.current && !isPending) {
+      gsap.to(
         cardRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+        { opacity: isMastered ? 0.7 : 1, y: 0, duration: 0.4, ease: "power2.out" },
       );
     }
-  }, []);
+  }, [isPending, isMastered]);
 
   const handleAcquiredToggle = async () => {
     toggleAcquired(item.uniqueName);
@@ -38,6 +48,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
   };
 
   const xpValue =
+    details?.totalExperience ||
     item.totalExperience ||
     ([
       "Warframes",
@@ -51,12 +62,25 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
       ? 6000
       : 3000);
 
+  const imageName = details?.imageName || item.imageName;
+
+  if (isPending) {
+    return (
+      <div className="bg-[#100e1a] border-2 border-[#1e1a2e] rounded-2xl p-4 aspect-[3/4] animate-pulse flex flex-col gap-4">
+        <div className="aspect-square w-full bg-[#08060e] rounded-xl" />
+        <div className="h-4 w-3/4 bg-[#08060e] rounded" />
+        <div className="mt-auto h-8 w-full bg-[#08060e] rounded-lg" />
+      </div>
+    );
+  }
+
   return (
     <div
       ref={cardRef}
-      className={`flex flex-col gap-3 p-4 rounded-2xl border-2 transition-all duration-300 group overflow-hidden ${
+      style={{ opacity: 0, transform: "translateY(20px)" }}
+      className={`flex flex-col gap-3 p-4 rounded-2xl border-2 transition-[border-color,background-color] duration-300 group overflow-hidden ${
         isMastered
-          ? "border-[#4cc9ff]/50 bg-[#4cc9ff]/[0.02] opacity-70"
+          ? "border-[#4cc9ff]/50 bg-[#4cc9ff]/[0.02]"
           : isAcquired
             ? "border-[#c8a96e]/50 bg-[#c8a96e]/[0.02]"
             : "border-[#1e1a2e] bg-[#100e1a] hover:border-[#2e2845]"
@@ -64,7 +88,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
     >
       <div className="aspect-square w-full bg-[#08060e] rounded-xl overflow-hidden border border-[#1e1a2e] relative flex-shrink-0 group-hover:scale-[1.02] transition-transform">
         <img
-          src={`${IMAGE_BASE_URL}${item.imageName}`}
+          src={imageName ? `${IMAGE_BASE_URL}${imageName}` : `https://via.placeholder.com/200/100e1a/c8a96e?text=${item.name[0]}`}
           alt={item.name}
           className="w-full h-full object-contain p-2"
           onError={(e) => {

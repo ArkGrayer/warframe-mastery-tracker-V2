@@ -6,7 +6,7 @@ import type { Item } from "@/domain/entities/Item";
 const CACHE_KEY_ITEMS = "wf_items_cache";
 const CACHE_KEY_GLYPHS = "wf_glyphs_cache";
 const CACHE_KEY_TIME = "wf_cache_timestamp";
-const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours
+const CACHE_EXPIRATION = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 export const fetchItemsUseCase = async () => {
   const itemStore = useItemStore.getState();
